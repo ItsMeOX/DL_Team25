@@ -419,15 +419,32 @@ def build_multichannel_tensor(
     start_sec: Optional[float] = None,
     end_sec: Optional[float] = None,
 ) -> torch.Tensor:
-    """Load and convert all channels, then align time and stack to tensor."""
+    """Load multi-channel audio, convert each channel to log-Mel spectrogram,
+    align their time dimensions, and stack into a single tensor."""
+    
     mel_channels: List[np.ndarray] = []
     for channel in channels:
         audio, sr = librosa.load(channel_to_path[channel], sr=None)
+        
+        # Crop audio to the specified time window (if provided)
+        # Ensures consistent segment length across all samples
         audio = crop_audio(audio, sr, start_sec=start_sec, end_sec=end_sec)
-        mel_channels.append(wav_to_logmel(audio, sr))
 
+        # Convert waveform -> log-Mel spectrogram
+        # This transforms raw audio into time-frequency representation
+        mel = wav_to_logmel(audio, sr)
+
+        mel_channels.append(mel)
+
+    # Align time dimension across channels
+    # Due to minor differences (e.g., rounding, cropping),
+    # spectrograms may have slightly different time lengths.
+    # We truncate all to the shortest one to ensure alignment.
     min_time = min(mel.shape[1] for mel in mel_channels)
-    mel_channels = [mel[:, :min_time] for mel in mel_channels]
+    mel_channels = [mel[:, :min_time] for mel in mel_channels] 
+
+    # Stack into multi-channel (4 channels for ToyCar dataset) tensor
+    # Final shape: (C, Mel, Time)
     return torch.tensor(np.stack(mel_channels), dtype=torch.float32)
 
 

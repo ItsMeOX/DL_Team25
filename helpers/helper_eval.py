@@ -42,7 +42,7 @@ def build_case_scoped_loaders(
     anom_indices: Sequence[int],
     selected_cases: Iterable[str],
     batch_size: int = 8,
-    anom_ratio: float = 0.05,
+    anom_ratio: float = 1.0,
 ):
     """Create normal/anomaly dataloaders filtered by selected cases."""
     selected = set(selected_cases)
@@ -70,7 +70,7 @@ def build_scope_loader_dict(
     anom_indices: Sequence[int],
     case_scopes: Dict[str, Sequence[str]],
     batch_size: int = 8,
-    anom_ratio: float = 0.05,
+    anom_ratio: float = 1.0,
     prefix: str = "val",
 ):
     """Build loaders for each named case scope."""

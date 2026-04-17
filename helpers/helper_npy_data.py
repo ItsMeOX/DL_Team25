@@ -213,10 +213,11 @@ class UnifiedNPYDataset(Dataset):
                 cnt_seg_dir = os.path.join(base_path, "CNT_SEG", case)
                 cnt_dir = os.path.join(base_path, "CNT", case)
                 if os.path.isdir(cnt_seg_dir):
+                    # Use preprocessed CNT segments if cnt_seg is available
                     cnt_paths = glob.glob(os.path.join(cnt_seg_dir, "*.npy"))
                 else:
-                    seg_paths = glob.glob(os.path.join(cnt_dir, "*_seg*.npy"))
-                    cnt_paths = seg_paths if seg_paths else glob.glob(os.path.join(cnt_dir, "*.npy"))
+                    # Otherwise use full cnt and cut later
+                    cnt_paths = glob.glob(os.path.join(cnt_dir, "*.npy"))
 
                 for p in cnt_paths:
                     x = np.load(p, mmap_mode="r")
@@ -258,7 +259,7 @@ class UnifiedNPYDataset(Dataset):
     def __getitem__(self, idx: int):
         path, start, label = self.samples[idx]
         x = np.load(path, mmap_mode="r")
-        if start is None: # CNT sample, crop to match IND length
+        if start is None: # IND sample, crop to make sure it matches target_T
             T = x.shape[-1]
             start = int(self.rng.integers(0, T - self.target_T + 1))
         x = x[:, :, start : start + self.target_T]
