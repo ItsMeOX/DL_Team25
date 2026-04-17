@@ -81,14 +81,20 @@ def normalize_minmax(spec: np.ndarray) -> np.ndarray:
     return (spec - spec.min()) / (spec.max() - spec.min() + 1e-8)
 
 
-def wav_to_logmel(audio: np.ndarray, sr: int) -> np.ndarray:
+def wav_to_logmel(
+    audio: np.ndarray, 
+    sr: int, 
+    n_fft = 1024, 
+    hop_length=512, 
+    n_mels=64
+) -> np.ndarray:
     """Convert waveform to normalized log-mel spectrogram."""
     mel = librosa.feature.melspectrogram(
         y=audio,
         sr=sr,
-        n_fft=1024,
-        hop_length=512,
-        n_mels=64,
+        n_fft=n_fft,
+        hop_length=hop_length,
+        n_mels=n_mels,
     )
     log_mel = librosa.power_to_db(mel, ref=np.max)
     return normalize_minmax(log_mel)
