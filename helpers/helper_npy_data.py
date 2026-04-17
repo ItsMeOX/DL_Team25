@@ -94,11 +94,14 @@ def crop_mel(
     return mel[:, :, start_frame:end_frame]
 
 
-def split_cnt_to_segments(
+def split_cnt_to_segments_and_save(
     data_base_path: str,
     max_workers: int = 8,
 ) -> None:
-    """Split CNT spectrogram `.npy` files into fixed 10-second chunks."""
+    """
+    Split CNT spectrogram `.npy` files into fixed chunks that have the same length as IND spectrogram.
+    Save the result `.npy` files into `cnt_seg_root` for further use.
+    """
     cnt_root = os.path.join(data_base_path, "npy", "CNT")
     ind_root = os.path.join(data_base_path, "npy", "IND")
     cnt_seg_root = os.path.join(data_base_path, "npy", "CNT_SEG")
@@ -108,10 +111,10 @@ def split_cnt_to_segments(
     if not sample_ind_files:
         raise FileNotFoundError("No IND normal files found.")
 
-    sample_ind_data = np.load(sample_ind_files[0])
-    time_axis = int(np.argmax(sample_ind_data.shape))
-    frames_per_10_sec = sample_ind_data.shape[time_axis]
-    print(f"[INFO] 10 seconds = {frames_per_10_sec} frames")
+    sample_ind_data = np.load(sample_ind_files[0]) # Shape: (n_channels, n_mels, n_timeframes)
+    time_axis = -1
+    ind_frame_count = sample_ind_data.shape[time_axis]
+    print(f"[INFO] IND length = {ind_frame_count} frames")
 
     def process_file(file_path: str):
         try:
@@ -121,8 +124,8 @@ def split_cnt_to_segments(
 
             spectrogram = np.load(file_path)
             total_frames = spectrogram.shape[time_axis]
-            num_full_chunks = total_frames // frames_per_10_sec
-            remainder = total_frames % frames_per_10_sec
+            num_full_chunks = total_frames // ind_frame_count
+            remainder = total_frames % ind_frame_count
 
             case_name = os.path.basename(os.path.dirname(file_path))
             case_output_dir = os.path.join(cnt_seg_root, case_name)
@@ -130,8 +133,8 @@ def split_cnt_to_segments(
 
             saved = 0
             for i in range(num_full_chunks):
-                start = i * frames_per_10_sec
-                end = start + frames_per_10_sec
+                start = i * ind_frame_count
+                end = start + ind_frame_count
                 slices = [slice(None)] * spectrogram.ndim
                 slices[time_axis] = slice(start, end)
                 segment = spectrogram[tuple(slices)]
@@ -147,6 +150,7 @@ def split_cnt_to_segments(
     cnt_files = glob.glob(os.path.join(cnt_root, "*", "*.npy"))
     print(f"[INFO] Found {len(cnt_files)} CNT files")
 
+    # Use multi-threading workers for parallelization and speedup
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = [executor.submit(process_file, file_path) for file_path in cnt_files]
         for future in as_completed(futures):
@@ -254,7 +258,7 @@ class UnifiedNPYDataset(Dataset):
     def __getitem__(self, idx: int):
         path, start, label = self.samples[idx]
         x = np.load(path, mmap_mode="r")
-        if start is None:
+        if start is None: # CNT sample, crop to match IND length
             T = x.shape[-1]
             start = int(self.rng.integers(0, T - self.target_T + 1))
         x = x[:, :, start : start + self.target_T]
