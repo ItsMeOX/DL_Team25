@@ -2,7 +2,7 @@
 
 ## Unsupervised Anomaly Detection Using Toy Car Audio Data
 
-This project investigates unsupervised anomaly detection on multichannel toy car audio using reconstruction-based deep learning models, including DNN-based, CNN-based, LSTM-based, and Transformer-based autoencoders. The goal is to learn normal sound patterns and detect deviations via reconstruction error.
+This project investigates unsupervised anomaly detection on multichannel toy car audio using reconstruction-based deep learning models, including DNN-based, CNN-based, LSTM-based, Transformer-based autoencoders and CNN variational autoencoder. The goal is to learn normal sound patterns and detect deviations via reconstruction error.
 
 ## Project Structure
 
@@ -31,23 +31,6 @@ Due to large file sizes, the dataset is **not tracked in GitHub**. The expected 
 ### Raw audio data (.wav):
 
     /ToyCar
-        /npy
-            /CNT_SEG
-                /case[1-4]
-                    [sample_id]_seg[seg_idx].npy
-                    ...
-            /IND
-                /case[1-4]
-                    /normal
-                        [sample_id].npy
-                        ...
-                    /anomaly
-                        ab[anom_id]_[sample_id].npy
-                        ...
-
-### Processed audio data (.npy):
-
-    /ToyCar
         /case1
             /AnomalousSound_IND
                 1101010001_ToyCar_case1_ab01_IND_ch1_0001.wav
@@ -64,6 +47,23 @@ Due to large file sizes, the dataset is **not tracked in GitHub**. The expected 
             ...
         /case4
             ...
+
+### Processed audio data (.npy):
+
+    /ToyCar
+        /npy
+            /CNT_SEG
+                /case[1-4]
+                    [sample_id]_seg[seg_idx].npy
+                    ...
+            /IND
+                /case[1-4]
+                    /normal
+                        [sample_id].npy
+                        ...
+                    /anomaly
+                        ab[anom_id]_[sample_id].npy
+                        ...
 
 ## Pipeline Overview
 
