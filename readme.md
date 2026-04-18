@@ -6,11 +6,6 @@ This project investigates unsupervised anomaly detection on multichannel toy car
 
 ## Project Structure
 
-    /helpers/
-       helper_audio_data.py      # Audio loading, preprocessing, spectrogram generation
-       helper_eval.py            # Evaluation metrics (PR-AUC, scoring, etc.)
-       helper_npy_data.py        # .npy dataset handling and loading
-
     /outputs/
        /models/                  # Trained model checkpoints
            best_CNN_AE.pth
@@ -18,11 +13,19 @@ This project investigates unsupervised anomaly detection on multichannel toy car
        /studies/                 # Optuna hyperparameter tuning results
            cnn_study.pkl
 
-    01-Data_Preparation.ipynb    # Data preprocessing pipeline
-    02-DNN_AE.ipynb              # DNN Autoencoder training & evaluation
-    03-CNN_AE.ipynb              # CNN Autoencoder training & evaluation
-    04-LSTM_AE.ipynb              # CNN Autoencoder training & evaluation
-    05-Transformer_AE.ipynb      # Transformer Autoencoder training & evaluation
+    /report/                     # The report for this project
+        report.pdf
+
+    /src/                            # Contains all the notebooks for this project
+        /helpers/
+            helper_audio_data.py      # Audio loading, preprocessing, spectrogram generation
+            helper_eval.py            # Evaluation metrics (PR-AUC, scoring, etc.)
+            helper_npy_data.py        # .npy dataset handling and loading
+        01-Data_Preparation.ipynb    # Data preprocessing pipeline
+        02-DNN_AE.ipynb              # DNN Autoencoder training & evaluation
+        03-CNN_AE.ipynb              # CNN Autoencoder training & evaluation
+        04-LSTM_AE.ipynb             # LSTM Autoencoder training & evaluation
+        05-Transformer_AE.ipynb      # Transformer Autoencoder training & evaluation
 
     requirements.txt
 
@@ -86,7 +89,6 @@ Due to large file sizes, the dataset is **not tracked in GitHub**. The expected 
   - CNN Autoencoder
   - Transformer Autoencoder
   - LSTM Autoencoder
-  - CNN Variational Autoencoder
 
 ### 3. Anomaly Detection
 
@@ -124,8 +126,8 @@ pip install -r requirements.txt
 
 Run in order:
 
-- `01-Data_Preparation.ipynb`
-- `02-DNN_AE.ipynb`
+- `/src/01-Data_Preparation.ipynb`
+- `/src/02-DNN_AE.ipynb`
 - ... other models
 
 ### 4) Outputs
