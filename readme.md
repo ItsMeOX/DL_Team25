@@ -52,13 +52,13 @@ These files are split archives. You only need download all to above files and un
 
 This will automatically extract and combine all parts into the full dataset.
 
-### Data folder structure
-
 Make sure you have 7-Zip installed:
 
 - Linux: sudo apt install p7zip-full
 - Mac: brew install p7zip
 - Windows: use 7-Zip GUI or CLI
+
+### Data folder structure
 
 Due to large file sizes, the dataset is **not tracked in GitHub**. The expected structure is:
 
@@ -118,12 +118,13 @@ Due to large file sizes, the dataset is **not tracked in GitHub**. The expected 
   - CNN Autoencoder
   - Transformer Autoencoder
   - LSTM Autoencoder
+  - CNN Variational Autoencoder
 
 ### 3. Anomaly Detection
 
 - Reconstruction error used as anomaly score
 - Supports L1 and L2 scoring
-- Evaluated using **Precision-Recall AUC (PR-AUC)**
+- Evaluated using **Precision-Recall AUC (PR-AUC)** and **F1 score**
 
 ## Quick Start
 
