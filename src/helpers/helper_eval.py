@@ -183,12 +183,21 @@ def plot_one_reconstruction(model, loader_iter, device) -> None:
     model.eval()
     x, _ = next(loader_iter)
     x = x.to(device)
+
     with torch.no_grad():
         recon = model(x)
 
     x0 = x[0].cpu()
     recon0 = recon[0].cpu()
-    err = torch.abs(x0 - recon0).mean().item()
+
+    error_map = torch.abs(x0 - recon0)
+
+    err = error_map.mean().item()
 
     plot_multichannel_spec(x0, "Original Log-Mel Spectrogram (Sample)")
     plot_multichannel_spec(recon0, f"Reconstruction | L1 Error: {err:.4f}")
+    plot_multichannel_spec(
+        error_map,
+        f"Error Map | Mean Error: {err:.4f}",
+        is_error=True
+    )
