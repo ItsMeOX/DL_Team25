@@ -33,6 +33,33 @@ This project investigates unsupervised anomaly detection on multichannel toy car
 
 ## Data (Not included in repository)
 
+The dataset can be downloaded from:
+https://zenodo.org/records/3351307#.XT-JZ-j7QdU
+
+Download the following files:
+TorCar.7z.001
+TorCar.7z.002
+...
+TorCar.7z.007
+
+### How to extract
+
+These files are split archives. You only need download all to above files and unzip the first file:
+
+```bash
+7z x ToyCar.7z.001
+```
+
+This will automatically extract and combine all parts into the full dataset.
+
+### Data folder structure
+
+Make sure you have 7-Zip installed:
+
+- Linux: sudo apt install p7zip-full
+- Mac: brew install p7zip
+- Windows: use 7-Zip GUI or CLI
+
 Due to large file sizes, the dataset is **not tracked in GitHub**. The expected structure is:
 
 ### Raw audio data (.wav):
