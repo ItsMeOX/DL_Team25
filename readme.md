@@ -2,7 +2,7 @@
 
 ## Unsupervised Anomaly Detection Using Toy Car Audio Data
 
-This project investigates unsupervised anomaly detection on multichannel toy car audio using reconstruction-based deep learning models, including DNN-based, CNN-based, LSTM-based, and Transformer-based autoencoders. The goal is to learn normal sound patterns and detect deviations via reconstruction error.
+This project investigates unsupervised anomaly detection on multichannel toy car audio using reconstruction-based deep learning models, including DNN-based, CNN-based, LSTM-based, Transformer-based autoencoders, and CNN-based variational autoencoder. The goal is to learn normal sound patterns and detect deviations via reconstruction error.
 
 ## Project Structure
 
@@ -26,6 +26,8 @@ This project investigates unsupervised anomaly detection on multichannel toy car
         03-CNN_AE.ipynb              # CNN Autoencoder training & evaluation
         04-LSTM_AE.ipynb             # LSTM Autoencoder training & evaluation
         05-Transformer_AE.ipynb      # Transformer Autoencoder training & evaluation
+        06-CNN_VAE.ipynb      # CNN Variational Autoencoder training & evaluation
+
 
     requirements.txt
 
